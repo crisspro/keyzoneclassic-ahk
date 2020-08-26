@@ -1,16 +1,22 @@
-;Nombre: KeyZone Classic-AHK
+;Nombre: Keyzone Classic-AHK
 ;Autor: crisspro
 ;Año: 2020
 ;Licencia: GPL-3.0
 
 #include nvda.ahk
 
+ScriptNombre:= "KeyzoneClassic-AHK"
+VSTNombre:= "Keyzone"
+VSTControl:= "JUCE"
+
 xg:= 0
 yg:= 0
-VSTDetectado:= False
+VSTControlDetectado:= False
+VSTNombreDetectado:= False
 
-;construccion del menu
-Menu,Menu, Add, KeyZone Piano,Keyzone
+
+;construcción del menú
+Menu,Menu, Add, Keyzone Piano,Keyzone
 Menu,Menu, Add, Yamaha Grand Piano,Yamaha
 Menu,Menu, Add,Steinway Piano,Steinway 
 Menu,Menu, Add, Basic Electric Piano,Electric
@@ -30,32 +36,36 @@ nvdaSpeak(en)
 ;inicio
 SoundPlay,sounds/start.wav
 
-hablar("KeyZoneClassic activado", "KeyZoneClassicc ready")
+hablar(ScriptNombre " activado",ScriptNombre " ready")
 
 
 loop
 {
 WinGet, VentanaID,Id,A
 winget, controles, ControlList, A
+WinGetText,VentanaTexto,A
+If VentanaTexto contains %VSTNombre%
+{
+VSTNombreDetectado:= True
 loop, parse, controles, `n
 {
-if A_LoopField contains JUCE
+if A_LoopField contains %VSTControl%
 {
-global VSTDetectado:= True
+VSTControlDetectado:= True
 ControlGetPos, x,y,a,b,%A_loopField%, ahk_id %VentanaID% 
-global xg:= x
-global yg:= y
+xg:= x
+yg:= y
 break
 }
-if A_LoopField not contains JUCE
-global VSTDetectado:= False
+else
+VSTControlDetectado:= False
 }
 }
-
+}
 
 
 ;atajos
-#If VSTDetectado= True
+#If VSTControlDetectado= True and VSTNombreDetectado= True
 
 
 
@@ -68,30 +78,35 @@ Keyzone:
 MouseClick,LEFT, xg+400, yg+26
 Sleep 100
 MouseClick,LEFT,xg+400, yg+64 
+hablar("Keyzone piano", "Keyzone piano")
 return
 
 Yamaha:
 MouseClick,LEFT,xg+400, yg+26,1
 Sleep 100
 MouseClick,LEFT,xg+400, yg+94,1
+hablar("Yamaha grand piano", "Yamaha grand piano")
 return
 
 Steinway:
 MouseClick,LEFT,xg+400, yg+26,1
 Sleep 100
 MouseClick,LEFT,xg+400, yg+114,1
+hablar("Steinway piano", "Steinway piano")
 return
 
 Electric:
 MouseClick,LEFT,xg+400, yg+26,1
 Sleep 100
 MouseClick,LEFT,xg+400, yg+134,1
+hablar("Basic elecctric piano", "Basic electric piano")
 return
 
 rhodes:
 MouseClick,LEFT,xg+400, yg+26,1
 Sleep 100
 MouseClick,LEFT,xg+400, yg+154,1
+hablar("Rhodes piano", "Rhodes piano")
 return
 return
 
@@ -117,7 +132,7 @@ Run Documentation\en.html
 return
 
 ^q:: 
-hablar("KeyZoneClassic-AHK cerrado", "KeyZoneClassic-AHK closed")
+hablar(ScriptNombre " cerrado",ScriptNombre " closed")
 SoundPlay,sounds/exit.wav,1
 ExitApp
 return
