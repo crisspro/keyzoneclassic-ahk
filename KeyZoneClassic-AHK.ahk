@@ -33,18 +33,18 @@ else
 nvdaSpeak(en)
 }
 
+SetTitleMatchMode,2
+
 ;inicio
 SoundPlay,sounds/start.wav
-
 hablar(ScriptNombre " activado",ScriptNombre " ready")
 
-
+;detecta el plugin
 loop
 {
 WinGet, VentanaID,Id,A
 winget, controles, ControlList, A
-WinGetText,VentanaTexto,A
-If VentanaTexto contains %VSTNombre%
+IfWinActive,%VSTNombre%
 {
 VSTNombreDetectado:= True
 loop, parse, controles, `n
@@ -61,6 +61,8 @@ else
 VSTControlDetectado:= False
 }
 }
+else
+VSTNombreDetectado:= False
 }
 
 
