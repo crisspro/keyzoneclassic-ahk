@@ -11,3 +11,4 @@ This script Must be working withh any DAW, was tested with:
 1. Run KeyzoneClassic-AHK.
 2. Open KeyZone Classic VSTI plugin in your DAW.
 3. Use the hotkeys (read the documentation)
+4. Can close the script from system tray.
